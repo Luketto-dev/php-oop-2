@@ -1,5 +1,6 @@
 <?php
 require_once "classi/Cart.php";
+require_once "classi/PaymentMethod.php";
     class User{
 
         private $firstName;
@@ -7,6 +8,7 @@ require_once "classi/Cart.php";
         private $lastName;
         private $isRegistered;
         public Cart $cart;
+        public PaymentMethod $paymentMethod;
 
         public function __construct($_email, $_isRegistered)
         {
@@ -14,6 +16,7 @@ require_once "classi/Cart.php";
             $this->setIsRegistered($_isRegistered);
 
             $this->cart = new Cart();
+            $this->paymentMethod = new PaymentMethod("Carta di credito");
         }
 
         /**

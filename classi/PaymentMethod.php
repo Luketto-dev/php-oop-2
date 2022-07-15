@@ -1,21 +1,21 @@
 <?php
 class PaymentMethod{
 
-    private $paymentcard;
+    private $paymentCard;
     private $cardExpiration;
 
 
-    function __construct($_cardExpiration)
+    function __construct($_paymentCard)
     {
-        $this->setCardExpiration($_cardExpiration);
+        $this->setPaymentCard($_paymentCard);
     }
 
     /**
      * Get the value of paymentcard
      */ 
-    public function getPaymentcard()
+    public function getPaymentCard()
     {
-        return $this->paymentcard;
+        return $this->paymentCard;
     }
 
     /**
@@ -23,9 +23,9 @@ class PaymentMethod{
      *
      * @return  self
      */ 
-    public function setPaymentcard($paymentcard)
+    public function setPaymentCard($paymentCard)
     {
-        $this->paymentcard = $paymentcard;
+        $this->paymentCard = $paymentCard;
 
         return $this;
     }

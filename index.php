@@ -33,6 +33,8 @@ $kennel->setBrand("Ferplast");
 var_dump($kennel);
 
 $user1->cart->addProduct($food);
+$user1->paymentMethod->setCardExpiration("13/01/2024");
+$user1->cart->getProducts();
 
 var_dump($user1);
 
