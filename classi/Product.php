@@ -1,15 +1,16 @@
 <?php
 class Product{
 
-    private $price;
-    private $name;
-    private $brand;
+    private float $price;
+    private string $name;
+    private $id;
 
 
     function __construct($_price, $_name)
     {
         $this->setPrice($_price);
         $this->setName($_name);
+        $this->id = uniqid();
     }
     /**
      * Get the value of price
@@ -51,24 +52,13 @@ class Product{
         return $this;
     }
 
-    /**
-     * Get the value of brand
-     */ 
-    public function getBrand()
-    {
-        return $this->brand;
-    }
 
     /**
-     * Set the value of brand
-     *
-     * @return  self
+     * Get the value of id
      */ 
-    public function setBrand($brand)
+    public function getId()
     {
-        $this->brand = $brand;
-
-        return $this;
+        return $this->id;
     }
 }
 ?>

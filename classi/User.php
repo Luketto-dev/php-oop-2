@@ -1,40 +1,42 @@
 <?php
-require_once "classi/Cart.php";
-require_once "classi/PaymentMethod.php";
+require_once __DIR__ . "/Cart.php";
+require_once __DIR__ . "/paymentHandler.php";
     class User{
 
-        private $firstName;
+        private $userName;
         private $email;
-        private $lastName;
-        private $isRegistered;
+        private $isRegistered = false;
         public Cart $cart;
-        public PaymentMethod $paymentMethod;
+        public PaymentHandler $paymentHandler;
+        
 
-        public function __construct($_email, $_isRegistered)
+        public function __construct($_email = null, $_userName = null)
         {
-            $this->setEmail($_email);
-            $this->setIsRegistered($_isRegistered);
+            // se mi vengono passati email e username allora è registrato altrimenti no    
+            if (isset($_email) && isset($_userName)) {
+                $this->registered($_email, $_userName);
+            }
 
             $this->cart = new Cart();
-            $this->paymentMethod = new PaymentMethod("Carta di credito");
+            $this->paymentHandler = new PaymentHandler();
         }
 
         /**
-         * Get the value of firstName
+         * Get the value of userName
          */ 
-        public function getFirstName()
+        public function getUserName()
         {
-                return $this->firstName;
+                return $this->userName;
         }
 
         /**
-         * Set the value of firstName
+         * Set the value of userName
          *
          * @return  self
          */ 
-        public function setFirstName($firstName)
+        public function setUserName($userName)
         {
-                $this->firstName = $firstName;
+                $this->userName = $userName;
 
                 return $this;
         }
@@ -54,27 +56,8 @@ require_once "classi/PaymentMethod.php";
          */ 
         public function setEmail($email)
         {
+                
                 $this->email = $email;
-
-                return $this;
-        }
-
-        /**
-         * Get the value of lastName
-         */ 
-        public function getLastName()
-        {
-                return $this->lastName;
-        }
-
-        /**
-         * Set the value of lastName
-         *
-         * @return  self
-         */ 
-        public function setLastName($lastName)
-        {
-                $this->lastName = $lastName;
 
                 return $this;
         }
@@ -93,11 +76,40 @@ require_once "classi/PaymentMethod.php";
          *
          * @return  self
          */ 
-        public function setIsRegistered($isRegistered)
+        private function setIsRegistered($isRegistered)
         {
                 $this->isRegistered = $isRegistered;
 
                 return $this;
+        }
+
+        public function registered($_email, $_userName){
+                $this->setEmail($_email);
+                $this->setUserName($_userName);
+                $this->setIsRegistered(true);
+        }
+
+        public function checkOut($paymentIndex){
+                //recuperare il totale del carrello 
+
+                $total = $this->cart->getTotal();
+
+                // controllare se deve fare uno sconto 
+                $discount = $this->isRegistered ? 20 : 0;
+
+                $totalWithDiscount = $total - ($total * $discount / 100);
+
+                // controllare se il metodo non sia scaduto
+
+                $method = $this->paymentHandler->getMethod($paymentIndex);
+
+
+                if ($method->checkExpiration()) {
+                        echo "pagamento riuscito per un totale di euro " . $totalWithDiscount . " per l'utente " . $this->getUserName();
+                }else{
+                        echo "pagamento fallito per l' utente " . $this->getUserName();
+                }
+                // concludere il pagamento
         }
     }
 ?>
